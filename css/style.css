@@ -1,0 +1,21 @@
+body{
+  background: radial-gradient(#7618ad, #fff) fixed;
+}
+
+img{
+  width: 33%;
+}
+
+div{
+  width: 960px;
+  margin: 0px auto;
+  margin-top: 200px;
+}
+
+p{
+  width: 960px;
+  margin: 0px auto;
+   margin-top: 20px;
+  font-size: 20px;
+  
+}
