@@ -5,6 +5,9 @@ var centerItemEl = document.getElementById('center-image');
 var leftItemEl = document.getElementById('left-image');
 var divEl = document.getElementById('product-item');
 var allItems = [];
+var votes = [];
+var titles = [];
+var productChart;
 
 function Product(name) {
   this.name = name;
@@ -21,9 +24,83 @@ allProductItems.forEach(function (productItem) {
 
 
 
-console.log(allItems);
-var usedItems = [];
 
+//FUNCTION TO UPDATE CHART
+
+function updateChartArray() {
+  for (var i = 0; i < allItems.length; i++) {
+    titles[i] = allItems[i].name;
+    votes[i] = allItems[i].timesShown;
+  }
+
+}
+updateChartArray();
+
+
+// makinga function to store all the color for the backgroundColor
+var colorChart = [];
+function populateColors() {
+  for (var allItemsIndex = 0; allItemsIndex < allItems.length; allItemsIndex++) {
+    var differentColor = ('${Math.floor(Math.random() * #000000).toString(16)}');
+    colorChart.push(differentColor);
+  }
+
+}
+populateColors();
+
+var data = {
+  label: titles,
+  datasets: [
+    {
+      data: votes,
+      backgroundColor: colorChart,
+      // borderColor: #000,
+      borderWidth: 1
+    }
+  ]
+
+};
+
+function drawChart() {
+  var ctx = document.getElementById('myProducts').getContext('2d');
+  productChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+      legend: {
+        fontColor: 'darkgreen',
+        fontSize: 18
+      }
+    },
+    responsive: false,
+    animation: {
+      duration: 1000,
+      easing: 'easeOutBounce'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          max: 10,
+          min: 0,
+          stepSize: 1.0
+
+        }
+      }]
+    }
+  });
+}
+
+function hideChart() {
+  document.getElementById('myProducts').hidden = true;
+}
+drawChart();
+hideChart();
+
+
+
+
+
+var usedItems = [];
 function showRandomItem(event) {
 
   var rando1 = Math.floor(allItems.length * Math.random());
@@ -67,6 +144,7 @@ var endClicks = function () {
   }
   //need to call this functio inside the event listener
 };
+
 
 divEl.addEventListener('click', function (event) {
   console.log(event.target);
