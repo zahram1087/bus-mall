@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
     <title>BusMall Focus Group</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script> 
 </head>
 <body>
     <p>Thank you for taking the time today to be part of this focus group.</p>
@@ -16,14 +17,14 @@
     <p>You will be compensated for your time and effort with a prepaid debit card in the amount of $25.00.</p>
 
    <div id = "product-item">
-       <img id= "left-image">
-       <img id= "center-image">
-       <img id= "right-image">   
+       <img id= "left-image" title = "">
+       <img id= "center-image" title = "">
+       <img id= "right-image" title = "">   
    </div> 
 
-   <div id= "choices-display">
-
-   </div>
+   <div id= "choices-display"></div>
+<canvas id = "myProducts" width="800px" height="400px"></canvas>
+  
 <script src="js/app.js"></script>    
 </body>
 </html>
