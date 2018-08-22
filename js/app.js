@@ -19,9 +19,9 @@ allProductItems.forEach(function (productItem) {
   new Product(productItem);
 });
 
-//var usedItemsCount = 0;
-console.log(allItems);
 
+
+console.log(allItems);
 var usedItems = [];
 
 function showRandomItem(event) {
@@ -48,8 +48,6 @@ function showRandomItem(event) {
   allItems[rando3].timesShown++;
   usedItems.push(rando3);
 
-  //usedItemsCount++;
-
 
   if (usedItems.length > 6) {
     usedItems.splice(0, 3);
@@ -60,9 +58,7 @@ showRandomItem();
 
 
 
-
 // Getting the items to display
-//var userClicks = 0;
 var userClicks = 0;
 
 var endClicks = function () {
@@ -79,18 +75,14 @@ divEl.addEventListener('click', function (event) {
   endClicks();
 });
 
-
-
-//divEl.removeEventListener( 'click', function(event));
-
-
 //displaying number of clicks
-
+var getChoices = document.getElementById('choices-display');
 Product.prototype.render = function () {
-  var trEl = document.createElement('tr');
-  var tdEl = document.createElement('td');
-  tdEl.textContent = this.timesShown;
+  var trEl = document.createElement('ul');
+  var tdEl = document.createElement('li');
+  tdEl.textContent = `${this.name} was shown ${this.timesShown}`;
   trEl.appendChild(tdEl);
+  getChoices.appendChild(tdEl);
 
 };
 
@@ -101,20 +93,4 @@ function renderAllItems() {
 }
 renderAllItems();
 
-// rightItemEl.addEventListener('click', function (event) {
-//   console.log(event.target);
-//   showRandomItem(event);
-//   userClicks++;
-// });
 
-// centerItemEl.addEventListener('click', function (event) {
-//   console.log(event.target);
-//   showRandomItem(event);
-//   userClicks++;
-// });
-
-// leftItemEl.addEventListener('click', function (event) {
-//   console.log(event.target);
-//   showRandomItem(event);
-//   userClicks++;
-// });
