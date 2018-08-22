@@ -7,22 +7,35 @@ var divEl = document.getElementById('product-item');
 var allItems = [];
 var votes = [];
 var titles = [];
-var productChart;
 
-function Product(name) {
+
+
+function Product(name, timesShown, votes) {
   this.name = name;
-  this.timesShown = 0;
+  this.timesShown = timesShown || 0;
+  this.votes = votes || 0;
   this.path = `img/${name}.jpg`; //remember to call the file path correctly! imag not images!
+
   allItems.push(this);
 }
 
-var allProductItems = ['bag', 'banana', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
+var allProductItems = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
 
-allProductItems.forEach(function (productItem) {
-  new Product(productItem);
-});
-
-
+function checkLocalStorage() {
+  if (localStorage.getItem('finishedGame')) {
+    var retrievedItems = JSON.parse(localStorage.getItem('finishedGame'));
+    console.log('retreieved', retrievedItems);
+    retrievedItems.forEach(function(productItem) {
+      new Product( productItem.name, productItem.timesShown, productItem.votes);
+    });
+  }
+  else {
+    allProductItems.forEach(function(productItem) {
+      new Product(productItem);
+    });
+  }
+}
+checkLocalStorage();
 
 
 //FUNCTION TO UPDATE CHART
@@ -34,27 +47,27 @@ function updateChartArray() {
   }
 
 }
-updateChartArray();
+
 
 
 // makinga function to store all the color for the backgroundColor
 var colorChart = [];
 function populateColors() {
   for (var allItemsIndex = 0; allItemsIndex < allItems.length; allItemsIndex++) {
-    var differentColor = ('${Math.floor(Math.random() * #000000).toString(16)}');
+    var differentColor = 'purple';
     colorChart.push(differentColor);
   }
 
 }
-populateColors();
+
 
 var data = {
-  label: titles,
+  labels: titles,
   datasets: [
     {
+      label: 'Preferences',
       data: votes,
       backgroundColor: colorChart,
-      // borderColor: #000,
       borderWidth: 1
     }
   ]
@@ -63,7 +76,7 @@ var data = {
 
 function drawChart() {
   var ctx = document.getElementById('myProducts').getContext('2d');
-  productChart = new Chart(ctx, {
+  new Chart(ctx, {
     type: 'bar',
     data: data,
     options: {
@@ -93,12 +106,21 @@ function drawChart() {
 function hideChart() {
   document.getElementById('myProducts').hidden = true;
 }
-drawChart();
-hideChart();
 
 
-
-
+// Getting the items to display
+var userClicks = 0;
+var endClicks = function () {
+  if (userClicks === 25) {
+    divEl.removeEventListener('click', showRandomItem);
+    updateChartArray();
+    console.log(votes);
+    populateColors();
+    drawChart();
+    localStorage.setItem('finishedGame', JSON.stringify(allItems));
+  }
+  //need to call this functio inside the event listener
+};
 
 var usedItems = [];
 function showRandomItem(event) {
@@ -106,6 +128,7 @@ function showRandomItem(event) {
   var rando1 = Math.floor(allItems.length * Math.random());
   usedItems.push(rando1);
   rightItemEl.src = allItems[rando1].path;
+  rightItemEl.title = allItems[rando1].name;
   allItems[rando1].timesShown++;
 
   var rando2 = Math.floor(allItems.length * Math.random());
@@ -113,6 +136,7 @@ function showRandomItem(event) {
     rando2 = Math.floor(allItems.length * Math.random());
   }
   centerItemEl.src = allItems[rando2].path;
+  centerItemEl.title = allItems[rando2].name;
   allItems[rando2].timesShown++;
   usedItems.push(rando2);
 
@@ -122,6 +146,7 @@ function showRandomItem(event) {
     rando3 = Math.floor(allItems.length * Math.random());
   }
   leftItemEl.src = allItems[rando3].path;
+  leftItemEl.title = allItems[rando3].name;
   allItems[rando3].timesShown++;
   usedItems.push(rando3);
 
@@ -129,44 +154,34 @@ function showRandomItem(event) {
   if (usedItems.length > 6) {
     usedItems.splice(0, 3);
   }
+  userClicks++;
+  endClicks();
 }
 
 showRandomItem();
 
-
-
-// Getting the items to display
-var userClicks = 0;
-
-var endClicks = function () {
-  if (userClicks === 25) {
-    divEl.innerHTML = '';
+function handleClick(event) {
+  for (var i = 0; i < allItems.length; i++) {
+    if (event.target.title === allItems[i].name){
+      allItems[i].votes++;
+    }
   }
-  //need to call this functio inside the event listener
-};
+  showRandomItem();
+}
 
 
-divEl.addEventListener('click', function (event) {
-  console.log(event.target);
-  showRandomItem(event);
-  userClicks++;
-  endClicks();
+divEl.addEventListener('click', handleClick);
+
+//displaying the chart
+document.getElementById('myProducts').addEventListener('click', function () {
+  document.getElementById('myProducts').hidden = true;
 });
 
-//displaying number of clicks
-var getChoices = document.getElementById('choices-display');
-Product.prototype.render = function () {
-  var trEl = document.createElement('ul');
-  var tdEl = document.createElement('li');
-  tdEl.textContent = `${this.name} was shown ${this.timesShown}`;
-  trEl.appendChild(tdEl);
-  getChoices.appendChild(tdEl);
 
-};
 
 function renderAllItems() {
   for (var i = 0; i < allItems.length; i++) {
-    allItems[i].render();
+    allItems[i].render;
   }
 }
 renderAllItems();
