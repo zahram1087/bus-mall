@@ -107,6 +107,7 @@ function hideChart() {
   document.getElementById('myProducts').hidden = true;
 }
 
+hideChart();
 
 // Getting the items to display
 var userClicks = 0;
