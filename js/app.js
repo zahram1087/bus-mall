@@ -76,7 +76,7 @@ var data = {
 
 function drawChart() {
   var ctx = document.getElementById('myProducts').getContext('2d');
-  new Chart(ctx, {
+  new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: data,
     options: {
@@ -107,6 +107,7 @@ function hideChart() {
   document.getElementById('myProducts').hidden = true;
 }
 
+hideChart();
 
 // Getting the items to display
 var userClicks = 0;
@@ -123,7 +124,7 @@ var endClicks = function () {
 };
 
 var usedItems = [];
-function showRandomItem(event) {
+function showRandomItem() {
 
   var rando1 = Math.floor(allItems.length * Math.random());
   usedItems.push(rando1);
